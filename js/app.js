@@ -18,7 +18,7 @@ let resultsContainer = document.getElementById('results-container');
 
 // ******* CONSTRUCTOR FUNCTION ********
 
-function Product(name, fileExtension = 'jpg'){
+function Product(name, fileExtension = 'jpg') {
   this.name = name;
   this.img = `img/${name}.${fileExtension}`;
   this.views = 0;
@@ -28,21 +28,22 @@ function Product(name, fileExtension = 'jpg'){
 }
 
 // ****** HELPER FUNTCION / UTILITIES ******
-function randomIndex(){
+function randomIndex() {
   return Math.floor(Math.random() * productArray.length);
 }
 
+let indexArray = [];
 
-function renderImgs(){
-  let imgOneIndex = randomIndex();
-  let imgTwoIndex = randomIndex();
-  let imgThreeIndex = randomIndex();
-
-
-  while(imgOneIndex === imgTwoIndex || imgOneIndex === imgThreeIndex || imgTwoIndex === imgThreeIndex){
-    imgTwoIndex = randomIndex();
-    imgThreeIndex = randomIndex();
+function renderImgs() {
+  while (indexArray.length < 6) {
+    let randomNum = randomIndex();
+    if (!indexArray.includes(randomNum)) {
+      indexArray.push(randomNum);
+    }
   }
+  let imgOneIndex = indexArray.shift();
+  let imgTwoIndex = indexArray.shift();
+  let imgThreeIndex = indexArray.shift();
 
   imgOne.src = productArray[imgOneIndex].img;
   imgTwo.src = productArray[imgTwoIndex].img;
@@ -55,20 +56,67 @@ function renderImgs(){
   imgOne.alt = productArray[imgOneIndex].name;
   imgTwo.alt = productArray[imgTwoIndex].name;
   imgThree.alt = productArray[imgThreeIndex].name;
-  
+
 }
+
+function renderChart() {
+
+  let productNames = [];
+  let productViews = [];
+  let productVotes = [];
+
+  for (let i = 0; i < productArray.length; i++) {
+    productNames.push(productArray[i].name);
+    productViews.push(productArray[i].views);
+    productVotes.push(productArray[i].clicks);
+  }
+
+  const ctx = document.getElementById('myChart').getContext('2d');
+  const myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: productNames,
+      datasets: [{
+        data: productVotes,
+        label: '# of Votes',
+        backgroundColor: [
+          'red',
+          'blue',
+          'yellow',
+          'purple',
+          'pink',
+        ],
+        borderColor: [
+          'black',
+          'red',
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+}
+
+
+
 
 // ***** EVENT HANDLERS **********
 
-function handleClick(event){
+function handleClick(event) {
   console.dir(event.target);
   let imgClicked = event.target.alt;
 
   // TODO: Add clicks to the image that was clicked
   console.log('img clicked >>', imgClicked);
 
-  for(let i = 0; i < productArray.length; i++){
-    if(productArray[i].name === imgClicked){
+  for (let i = 0; i < productArray.length; i++) {
+    if (productArray[i].name === imgClicked) {
       // increase vote counts
       productArray[i].clicks++;
     }
@@ -81,14 +129,15 @@ function handleClick(event){
   renderImgs();
 
   // TODO: after voting rounds have ended... end the clicks!
-  if(voteCount === 0){
+  if (voteCount === 0) {
     imgContainer.removeEventListener('click', handleClick);
+    renderChart();
   }
 }
 
-function handleShowResults(){
+function handleShowResults() {
   // TODO: Display results - once there are no more votes left
-  if(voteCount === 0){
+  if (voteCount === 0) {
     for(let i = 0; i < productArray.length; i++){
       let liElem = document.createElement('li');
       liElem.textContent = `${productArray[i].name} was viewed: ${productArray[i].views} and clicked: ${productArray[i].clicks}`;
@@ -124,5 +173,21 @@ new Product('wine-glass');
 
 renderImgs();
 
+
 imgContainer.addEventListener('click', handleClick);
 resultsBtn.addEventListener('click', handleShowResults);
+
+
+
+
+
+// function renderImgs(){
+//   let imgOneIndex = randomIndex();
+//   let imgTwoIndex = randomIndex();
+//   let imgThreeIndex = randomIndex();
+
+
+//   while(imgOneIndex === imgTwoIndex || imgOneIndex === imgThreeIndex || imgTwoIndex === imgThreeIndex){
+//     imgTwoIndex = randomIndex();
+//     imgThreeIndex = randomIndex();
+//   }
