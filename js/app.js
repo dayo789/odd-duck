@@ -138,11 +138,11 @@ function handleClick(event) {
 function handleShowResults() {
   // TODO: Display results - once there are no more votes left
   if (voteCount === 0) {
-    for(let i = 0; i < productArray.length; i++){
-      let liElem = document.createElement('li');
-      liElem.textContent = `${productArray[i].name} was viewed: ${productArray[i].views} and clicked: ${productArray[i].clicks}`;
-      resultsContainer.appendChild(liElem);
-    }
+    // for(let i = 0; i < productArray.length; i++){
+    //   let liElem = document.createElement('li');
+    //   liElem.textContent = `${productArray[i].name} was viewed: ${productArray[i].views} and clicked: ${productArray[i].clicks}`;
+    //   resultsContainer.appendChild(liElem);
+    // }
     resultsBtn.removeEventListener('click', handleShowResults);
   }
 }
