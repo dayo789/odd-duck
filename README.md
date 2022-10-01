@@ -1,8 +1,8 @@
 # odd-duck
 
-Lab-12
-Lab-13
-Lab-15b
+- Lab-12
+- Lab-13
+- Lab-15b
 
 - Odd Duck Products
 
